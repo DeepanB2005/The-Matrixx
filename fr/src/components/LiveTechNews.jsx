@@ -17,6 +17,36 @@ const fallbackImages = [tech1, tech2, tech3, tech4];
 const cacheKey = "matrixx-tech-news-newsdata";
 const cacheDuration = 15 * 60 * 1000;
 
+// Used when the live NewsData request is temporarily unavailable.
+const mockNewsData = {
+  results: [
+    {
+      title: "India's technology ecosystem continues to expand across AI, cloud and digital public infrastructure",
+      description: "Follow the latest developments shaping technology, innovation and digital careers.",
+      source_name: "The Matrixx",
+      link: "https://www.meity.gov.in/",
+    },
+    {
+      title: "Artificial intelligence is reshaping the skills employers look for",
+      description: "Businesses and institutions are placing greater emphasis on practical AI, data and cybersecurity skills.",
+      source_name: "The Matrixx",
+      link: "https://www.nasscom.in/",
+    },
+    {
+      title: "Cloud and cybersecurity remain key areas for technology investment",
+      description: "Technology teams are strengthening resilient infrastructure and security practices as digital services grow.",
+      source_name: "The Matrixx",
+      link: "https://www.cert-in.org.in/",
+    },
+    {
+      title: "New collaboration opportunities are connecting industry, institutions and emerging talent",
+      description: "Discover ideas, programs and opportunities that help build future-ready technology careers.",
+      source_name: "The Matrixx",
+      link: "https://www.digitalindia.gov.in/",
+    },
+  ],
+};
+
 export default function LiveTechNews() {
   const [articles, setArticles] = useState([]);
   const [status, setStatus] = useState("loading");
@@ -50,7 +80,7 @@ export default function LiveTechNews() {
     try {
       const query = new URLSearchParams({
         apikey: key,
-        category: "computer Science",
+        category: "IT",
         language: "en",
         country: "in",
         size: "5",
@@ -80,7 +110,9 @@ export default function LiveTechNews() {
       setStatus("ready");
     } catch (error) {
       console.error("NewsData error:", error);
-      setStatus("error");
+      setArticles(mockNewsData.results);
+      setCurrentIndex(0);
+      setStatus("ready");
     }
   }, []);
 

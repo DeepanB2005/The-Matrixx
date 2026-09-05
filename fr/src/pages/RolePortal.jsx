@@ -26,8 +26,33 @@ export default function RolePortal({ role, onBack }) {
               <Bell size={18} /></button><span className="hidden text-sm text-slate-500 sm:block">Welcome back</span><span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-sm font-bold text-white">TM</span></div></div>
               </header><div className="mx-auto max-w-[90rem] px-5 py-10 md:px-8">
                 
-                <section className="rounded-[2rem] bg-gradient-to-br from-sky-600 via-indigo-600 to-violet-700 p-8 text-white shadow-xl shadow-indigo-200 sm:p-10">
-                <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start"><div><span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium"><Icon size={14} /> {content.title}</span>
-              <SpiralParticles className="relative  opacity-90"/>
-                <h1 className="mt-5 text-4xl font-semibold tracking-[-.045em] sm:text-5xl">{content.greeting}</h1><p className="mt-4 max-w-xl text-sm leading-7 text-indigo-100">Your personalized Matrixx workspace brings the most relevant people, programs and progress into one place.</p></div><CalendarDays className="opacity-60" size={32} /></div></section><LiveTechNews /><section className="mt-6 grid gap-4 sm:grid-cols-3">{content.stats.map(([value, label]) => <div key={label} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><p className="text-3xl font-semibold tracking-tight">{value}</p><p className="mt-2 text-sm text-slate-500">{label}</p></div>)}</section><section className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr]"><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Suggested next steps</p><h2 className="mt-2 text-2xl font-semibold">Keep your momentum going.</h2></div><BriefcaseBusiness className="text-sky-500" /></div><div className="mt-6 space-y-3">{content.actions.map((action, index) => <button key={action} className="flex w-full items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 text-left text-sm font-medium text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"><span><span className="mr-3 text-sky-600">0{index + 1}</span>{action}</span><span>→</span></button>)}</div></div><aside className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Activity</p><h2 className="mt-2 text-2xl font-semibold">Stay connected.</h2><p className="mt-4 text-sm leading-7 text-slate-500">New opportunities and collaboration updates will appear here as your network grows.</p><button type="button" onClick={onBack} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-sky-700"><ArrowLeft size={16} /> Sign out</button></aside></section></div></main>;
+                <section className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-sky-600 via-indigo-600 to-violet-700 p-8 text-white shadow-xl shadow-indigo-200 sm:p-10">
+
+  {/* Spiral background — covers ONLY this section */}
+  <SpiralParticles className="absolute inset-0 z-0  opacity-90" />
+
+  {/* Section content */}
+  <div className="relative z-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
+
+    <div>
+      <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium">
+        <Icon size={14} />
+        {content.title}
+      </span>
+
+      <h1 className="mt-5 text-4xl font-semibold tracking-[-.045em] sm:text-5xl">
+        {content.greeting}
+      </h1>
+
+      <p className="mt-4 max-w-xl text-sm leading-7 text-indigo-100">
+        Your personalized Matrixx workspace brings the most relevant people,
+        programs and progress into one place.
+      </p>
+    </div>
+
+    <CalendarDays className="opacity-60" size={32} />
+
+  </div>
+</section>
+<LiveTechNews /><section className="mt-6 grid gap-4 sm:grid-cols-3">{content.stats.map(([value, label]) => <div key={label} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><p className="text-3xl font-semibold tracking-tight">{value}</p><p className="mt-2 text-sm text-slate-500">{label}</p></div>)}</section><section className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr]"><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Suggested next steps</p><h2 className="mt-2 text-2xl font-semibold">Keep your momentum going.</h2></div><BriefcaseBusiness className="text-sky-500" /></div><div className="mt-6 space-y-3">{content.actions.map((action, index) => <button key={action} className="flex w-full items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 text-left text-sm font-medium text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"><span><span className="mr-3 text-sky-600">0{index + 1}</span>{action}</span><span>→</span></button>)}</div></div><aside className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Activity</p><h2 className="mt-2 text-2xl font-semibold">Stay connected.</h2><p className="mt-4 text-sm leading-7 text-slate-500">New opportunities and collaboration updates will appear here as your network grows.</p><button type="button" onClick={onBack} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-sky-700"><ArrowLeft size={16} /> Sign out</button></aside></section></div></main>;
 }

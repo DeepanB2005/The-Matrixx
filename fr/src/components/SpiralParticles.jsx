@@ -3,10 +3,10 @@ import { useEffect, useRef } from "react";
 const particleConfig = {
   particles: {
     number: {
-      value: 205,
+      value: 105,
       density: {
         enable: true,
-        value_area: 900,
+        value_area: 400,
       },
     },
 
@@ -27,18 +27,18 @@ const particleConfig = {
     },
 
     size: {
-      value: 5,
+      value: 15,
       random: true,
       anim: {
-        enable: false,
+        enable: true,
       },
     },
 
     line_linked: {
       enable: true,
       distance: 150,
-      color: "#6366f1",
-      opacity: 0.3,
+      color: "#5ad3d3",
+      opacity: 0.7,
       width: 1,
     },
 
@@ -148,7 +148,7 @@ function Particles({ className = "" }) {
     <div
       ref={containerRef}
       id="particles-background"
-      className={`pointer-events-none fixed inset-0 z-0 ${className}`}
+      className={`pointer-events-none absolute inset-0 z-0 ${className}`}
       aria-hidden="true"
     />
   );
