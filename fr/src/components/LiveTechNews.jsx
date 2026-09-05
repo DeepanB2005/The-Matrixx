@@ -14,7 +14,7 @@ import tech3 from "./tech3.jpg";
 import tech4 from "./tech4.jpg";
 
 const fallbackImages = [tech1, tech2, tech3, tech4];
-const cacheKey = "matrixx-tech-news-newsdata";
+const cacheKey = "matrixx-tech-news-newsdata-v2";
 const cacheDuration = 15 * 60 * 1000;
 
 // Used when the live NewsData request is temporarily unavailable.
@@ -80,7 +80,8 @@ export default function LiveTechNews() {
     try {
       const query = new URLSearchParams({
         apikey: key,
-        category: "IT",
+        q: '"software development" OR cybersecurity OR AI',
+        category: "technology",
         language: "en",
         country: "in",
         size: "5",
