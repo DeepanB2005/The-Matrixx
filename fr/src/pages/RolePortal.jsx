@@ -3,12 +3,29 @@ import LiveTechNews from "../components/LiveTechNews";
 import logo from "../assets/logo.png";
 import SpiralParticles from "../components/SpiralParticles";
 import StudentCareerJourney from "../components/StudentCareerJourney";
-
+import IndustryDashboard from "../components/IndustryDashboard";
+import TrendingSkillsChart from "../components/TrendingSkillsChart";
 const portalContent = {
   student: { title: "Student portal", greeting: "Shape your next opportunity.", icon: GraduationCap, stats: [["72%", "Profile strength"], ["08", "Recommended roles"], ["03", "Skills to build"]], actions: ["Complete your skill profile", "Explore internships", "View learning recommendations"] },
   academician: { title: "Faculty portal", greeting: "Turn expertise into collaboration.", icon: Users, stats: [["05", "Collaboration matches"], ["12", "Industry programs"], ["03", "Research opportunities"]], actions: ["Update professional profile", "Discover industry projects", "Explore research partnerships"] },
   industry: { title: "Industry portal", greeting: "Meet capability with opportunity.", icon: Building2, stats: [["24", "Potential candidates"], ["06", "Active opportunities"], ["09", "Institution connections"]], actions: ["Post an opportunity", "Browse talent matches", "Plan a collaboration"] },
   institution: { title: "Institution portal", greeting: "Make institutional progress visible.", icon: School, stats: [["84%", "Placement readiness"], ["16", "Industry partners"], ["07", "Active programs"]], actions: ["View skill analytics", "Manage industry partners", "Review placement readiness"] },
+};
+
+
+
+const portalHeroColors = {
+  student:
+    "bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 shadow-xl shadow-blue-200",
+
+  academician:
+    "bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 shadow-xl shadow-emerald-200",
+
+  industry:
+    "bg-gradient-to-br from-violet-500 via-purple-600 to-fuchsia-700 shadow-xl shadow-purple-200",
+
+  institution:
+    "bg-gradient-to-br from-amber-400 via-orange-500 to-rose-600 shadow-xl shadow-orange-200",
 };
 
 export default function RolePortal({ role, onBack }) {
@@ -23,20 +40,22 @@ export default function RolePortal({ role, onBack }) {
           <span><span className="block text-sm font-bold tracking-[.1em]">THE MATRIXX</span>
           <span className="block text-[10px] uppercase tracking-[.22em] text-slate-400">{content.title}</span>
           </span></button><div className="flex items-center gap-4">
-            <button className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-500">
+            <button className="rounded-xl border border-red-400 bg-white p-2.5 text-slate-500">
               <Bell size={18} /></button><span className="hidden text-sm text-slate-500 sm:block">Welcome back</span><span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 text-sm font-bold text-white">D</span></div></div>
               </header><div className="mx-auto max-w-[90rem] px-5 py-10 md:px-8">
-                
-                <section className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-sky-600 via-indigo-600 to-violet-700 p-8 text-white shadow-xl shadow-indigo-200 sm:p-10">
+                      
+      <section
+  className={`relative isolate overflow-hidden rounded-[2rem] p-8 text-white sm:p-10 ${portalHeroColors[role]}`}
+>
+  {/* Spiral background */}
+  <SpiralParticles className="absolute inset-0 z-0 opacity-90" />
 
-  {/* Spiral background — covers ONLY this section */}
-  <SpiralParticles className="absolute inset-0 z-0  opacity-90" />
+  {/* Hero content */}
+  <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center">
 
-  {/* Section content */}
-  <div className="relative z-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
-
+    {/* LEFT */}
     <div>
-      <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium">
+      <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm">
         <Icon size={14} />
         {content.title}
       </span>
@@ -45,15 +64,30 @@ export default function RolePortal({ role, onBack }) {
         {content.greeting}
       </h1>
 
-      <p className="mt-4 max-w-xl text-sm leading-7 text-indigo-100">
+      <p className="mt-4 max-w-xl text-sm leading-7 text-white/80">
         Your personalized Matrixx workspace brings the most relevant people,
         programs and progress into one place.
       </p>
     </div>
 
-    <CalendarDays className="opacity-60" size={32} />
+    {/* RIGHT — STUDENT CHART */}
+    {role === "student" && (
+      <div className=" ml-30 h-60 w-100 rounded-3xl border border-white/20 bg-white/10 p-5 shadow-lg backdrop-blur-md">
+        <TrendingSkillsChart />
+      </div>
+    )}
+
+    {/* RIGHT — OTHER PORTALS */}
+    {role !== "student" && (
+      <div className="flex justify-end">
+        <CalendarDays
+          className="opacity-60"
+          size={32}
+        />
+      </div>
+    )}
 
   </div>
 </section>
-<LiveTechNews />{role === "student" && <StudentCareerJourney />}<section className="mt-6 grid gap-4 sm:grid-cols-3">{content.stats.map(([value, label]) => <div key={label} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><p className="text-3xl font-semibold tracking-tight">{value}</p><p className="mt-2 text-sm text-slate-500">{label}</p></div>)}</section><section className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr]"><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Suggested next steps</p><h2 className="mt-2 text-2xl font-semibold">Keep your momentum going.</h2></div><BriefcaseBusiness className="text-sky-500" /></div><div className="mt-6 space-y-3">{content.actions.map((action, index) => <button key={action} className="flex w-full items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 text-left text-sm font-medium text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"><span><span className="mr-3 text-sky-600">0{index + 1}</span>{action}</span></button>)}</div></div><aside className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Activity</p><h2 className="mt-2 text-2xl font-semibold">Stay connected.</h2><p className="mt-4 text-sm leading-7 text-slate-500">New opportunities and collaboration updates will appear here as your network grows.</p><button type="button" onClick={onBack} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-sky-700"><ArrowLeft size={16} /> Sign out</button></aside></section></div></main>;
-}
+      <LiveTechNews />{role === "student" && <StudentCareerJourney />}{role === "industry" && <IndustryDashboard />}<section className="mt-6 grid gap-4 sm:grid-cols-3">{content.stats.map(([value, label]) => <div key={label} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><p className="text-3xl font-semibold tracking-tight">{value}</p><p className="mt-2 text-sm text-slate-500">{label}</p></div>)}</section>{role !== "industry" && <section className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr]"><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Suggested next steps</p><h2 className="mt-2 text-2xl font-semibold">Keep your momentum going.</h2></div><BriefcaseBusiness className="text-sky-500" /></div><div className="mt-6 space-y-3">{content.actions.map((action, index) => <button key={action} className="flex w-full items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 text-left text-sm font-medium text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"><span><span className="mr-3 text-sky-600">0{index + 1}</span>{action}</span></button>)}</div></div><aside className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Activity</p><h2 className="mt-2 text-2xl font-semibold">Stay connected.</h2><p className="mt-4 text-sm leading-7 text-slate-500">New opportunities and collaboration updates will appear here as your network grows.</p><button type="button" onClick={onBack} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-sky-700"><ArrowLeft size={16} /> Sign out</button></aside></section>}</div></main>;
+      }

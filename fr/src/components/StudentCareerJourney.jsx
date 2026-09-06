@@ -12,12 +12,53 @@ import {
   X,
 } from "lucide-react";
 import CareerAndLearning from "./CareerAndLearning";
+import JobsAndInternships from "./RecommendationSection";
 
 const journeyCards = [
-  { id: "student-profile", title: "Profile", detail: "Complete your career profile", icon: FileText },
-  { id: "student-assessment", title: "Assessment", detail: "Skill gap and performance", icon: Target },
-  { id: "student-opportunities", title: "Internships & jobs", detail: "Roles matched to you", icon: BriefcaseBusiness },
-  { id: "student-recommendations", title: "Career & courses", detail: "Your next learning steps", icon: GraduationCap },
+  {
+    id: "student-profile",
+    title: "Profile",
+    detail: "Complete your career profile",
+    icon: FileText,
+    color: {
+      card: "border-blue-200 bg-blue-50/70 hover:border-blue-400",
+      icon: "bg-blue-100 text-blue-600",
+      active: "border-blue-400 ring-2 ring-blue-100",
+    },
+  },
+  {
+    id: "student-assessment",
+    title: "Assessment",
+    detail: "Skill gap and performance",
+    icon: Target,
+    color: {
+      card: "border-purple-200 bg-purple-200 hover:border-purple-400",
+      icon: "bg-purple-100 text-purple-600",
+      active: "border-purple-400 ring-2 ring-purple-100",
+    },
+  },
+  {
+    id: "student-opportunities",
+    title: "Internships & jobs",
+    detail: "Roles matched to you",
+    icon: BriefcaseBusiness,
+    color: {
+      card: "border-emerald-200 bg-emerald-50/70 hover:border-emerald-400",
+      icon: "bg-emerald-100 text-emerald-600",
+      active: "border-emerald-400 ring-2 ring-emerald-100",
+    },
+  },
+  {
+    id: "student-recommendations",
+    title: "Career & courses",
+    detail: "Your next learning steps",
+    icon: GraduationCap,
+    color: {
+      card: "border-orange-200 bg-orange-50/70 hover:border-orange-400",
+      icon: "bg-orange-100 text-orange-600",
+      active: "border-orange-400 ring-2 ring-orange-100",
+    },
+  },
 ];
 
 const assessmentQuestions = [
@@ -101,7 +142,14 @@ export default function StudentCareerJourney() {
       const correctAnswers = questions.filter((item) => answers[assessmentQuestions.indexOf(item)] === item.answer).length;
       return { area, score: Math.round((correctAnswers / questions.length) * 100) };
     });
-    setResult({ score: Math.round((correct / assessmentQuestions.length) * 100), skillScores, completedAt: new Date().toLocaleDateString() });
+    const answerReview = assessmentQuestions.map((item, index) => ({
+      area: item.area,
+      question: item.question,
+      selectedOption: item.options[answers[index]] || "Not answered",
+      correctOption: item.options[item.answer],
+      isCorrect: answers[index] === item.answer,
+    }));
+    setResult({ score: Math.round((correct / assessmentQuestions.length) * 100), skillScores, answers: answerReview, completedAt: new Date().toLocaleDateString() });
     setAttempts((count) => count + 1);
     closeAssessment();
     goToPage("student-assessment");
@@ -120,12 +168,34 @@ export default function StudentCareerJourney() {
   const skillGaps = result?.skillScores?.map(({ area, score: skillScore }) => [area, 100 - skillScore, skillScore]) ?? [];
 
   return <section className="mt-6 space-y-6" aria-label="Student career journey">
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {journeyCards.map(({ id, title, detail, icon: Icon }) => <button key={id} type="button" onClick={() => goToPage(id)} className={`group rounded-2xl border bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md ${activePage === id ? "border-sky-400 ring-2 ring-sky-100" : "border-slate-200"}`}>
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-sky-50 text-sky-600"><Icon size={19} /></span>
-        <p className="mt-4 font-semibold text-slate-900">{title}</p><p className="mt-1 text-sm text-slate-500">{detail}</p>
-      </button>)}
-    </div>
+   <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+  {journeyCards.map(({ id, title, detail, icon: Icon, color }) => (
+    <button
+      key={id}
+      type="button"
+      onClick={() => goToPage(id)}
+      className={`group rounded-2xl border p-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+        activePage === id
+          ? color.active
+          : color.card
+      }`}
+    >
+      <span
+        className={`grid h-10 w-10 place-items-center rounded-xl ${color.icon}`}
+      >
+        <Icon size={19} />
+      </span>
+
+      <p className="mt-4 font-semibold text-slate-900">
+        {title}
+      </p>
+
+      <p className="mt-1 text-sm text-slate-600">
+        {detail}
+      </p>
+    </button>
+  ))}
+</div>
 
     {activePage === "student-profile" && <section id="student-profile" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Step 1–5</p><h2 className="mt-2 text-2xl font-semibold">Build your assessment profile</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Your interests, specialization and resume skills tailor the assessment and recommendations.</p></div>{profileSaved && <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700"><CheckCircle2 size={16} /> Profile complete</span>}</div>
@@ -154,11 +224,15 @@ export default function StudentCareerJourney() {
       
           </div> 
       
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 xl:col-span-3">
+        <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center"><div><p className="font-semibold text-slate-900">Assessment answer review</p><p className="mt-1 text-sm text-slate-500">Your selected answers and correct answers from the latest attempt.</p></div><span className="rounded-full bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700">{result.answers?.filter((item) => item.isCorrect).length || 0}/{assessmentQuestions.length} correct</span></div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">{result.answers?.map((item, index) => <div key={item.question} className="rounded-xl border border-slate-100 bg-slate-50 p-4"><div className="flex items-start justify-between gap-3"><p className="text-sm font-medium leading-6 text-slate-900">{index + 1}. {item.question}</p><span className={`shrink-0 rounded-full px-2 py-1 text-[10px] font-bold ${item.isCorrect ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{item.isCorrect ? "Correct" : "Review"}</span></div><p className="mt-3 text-xs text-slate-500">Your answer: <span className="font-semibold text-slate-700">{item.selectedOption}</span></p><p className="mt-1 text-xs text-slate-500">Correct answer: <span className="font-semibold text-emerald-700">{item.correctOption}</span></p><p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">{item.area}</p></div>)}</div>
+      </div>
       <button className="p-3 bg-green-400 rounded-2xl shadow-2xs shadow-gray-200" type="button" onClick={() => goToPage("student-recommendations")}>Explore course recommendations for upskilling</button>
       </div>}
     </section>}
 
-    {activePage === "student-opportunities" && <section id="student-opportunities" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7"><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Step 9</p><h2 className="mt-2 text-2xl font-semibold">Internship and job recommendations</h2><div className="mt-5 grid gap-4 md:grid-cols-3">{["Frontend development intern", "Security operations trainee", "Junior AI engineering intern"].map((role) => <div key={role} className="rounded-2xl bg-slate-50 p-5"><BriefcaseBusiness className="text-sky-600" size={20} /><p className="mt-4 font-semibold">{role}</p><p className="mt-2 text-sm text-slate-500">Matched to your profile and assessment insights.</p></div>)}</div></section>}
+    {activePage === "student-opportunities" && <section id="student-opportunities" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7"><p className="text-xs font-semibold uppercase tracking-[.18em] text-sky-600">Step 9</p>  <JobsAndInternships profile={profile} assessmentResult={result} /></section>}
     {activePage === "student-recommendations" && <CareerAndLearning profile={profile} result={result} onViewAssessment={() => goToPage("student-assessment")} />}
 
     {assessmentOpen && <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950 p-4 text-white sm:p-8"><div className="mx-auto max-w-5xl"><div className="flex items-center justify-between"><div><p className="text-sm text-sky-300">Full-screen assessment</p><h2 className="text-2xl font-semibold">{profile.interest} skill assessment</h2></div><button type="button" onClick={closeAssessment} className="rounded-xl bg-white/10 p-3 hover:bg-white/20" aria-label="Close assessment"><X /></button></div><div className="mt-6 grid gap-6 lg:grid-cols-[.65fr_1.35fr]"><aside className="rounded-2xl bg-white/10 p-5"><div className="relative aspect-video overflow-hidden rounded-xl bg-slate-800"><video ref={videoRef} autoPlay muted playsInline className="h-full w-full object-cover" />{!mediaReady && <div className="absolute inset-0 grid place-items-center text-slate-400"><Camera /></div>}</div><div className="mt-4 flex gap-3"><button type="button" onClick={() => toggleMedia("video")} className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><Camera size={15} /> Camera {cameraEnabled ? "on" : "off"}</button><button type="button" onClick={() => toggleMedia("audio")} className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><Mic size={15} /> Mic {microphoneEnabled ? "on" : "off"}</button></div>{cameraError && <p className="mt-4 text-sm leading-6 text-rose-300">{cameraError}</p>}</aside><main className="space-y-5">{assessmentQuestions.map((item, index) => <div key={item.question} className="rounded-2xl bg-white p-5 text-slate-900"><p className="font-medium">{index + 1}. {item.question}</p><div className="mt-4 grid gap-2">{item.options.map((option, optionIndex) => <label key={option} className={`cursor-pointer rounded-xl border px-4 py-3 text-sm ${answers[index] === optionIndex ? "border-sky-500 bg-sky-50" : "border-slate-200"}`}><input type="radio" name={`question-${index}`} className="mr-3" checked={answers[index] === optionIndex} onChange={() => setAnswers((current) => ({ ...current, [index]: optionIndex }))} />{option}</label>)}</div></div>)}<button type="button" disabled={!mediaReady} onClick={submitAssessment} className="w-full rounded-xl bg-sky-500 px-5 py-3 font-semibold text-white hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-40">Submit assessment</button></main></div></div></div>}
